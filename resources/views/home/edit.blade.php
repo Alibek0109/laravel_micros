@@ -16,6 +16,7 @@
                 @endif
                 <form action="{{ route('home.update', ['id' => $data->id]) }}" method="post">
                     @csrf
+                    @method('patch')
                     <div class="form-group">
                         <label for="type_id">Тип</label>
                         <select class="form-control" id="type_id" name="type_id">

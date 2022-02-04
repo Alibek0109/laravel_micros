@@ -66,12 +66,8 @@
                                 @endif
                             @else
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('home.index') }}">{{ __('Главная') }}</a>
-                                </li>
-
-                                <li class="nav-item">
                                     <a class="nav-link"
-                                        href="{{ route('home.create') }}">{{ __('Управление') }}</a>
+                                        href="{{ route('home.index') }}">{{ __('Управление') }}</a>
                                 </li>
 
                                 <li class="nav-item dropdown">
@@ -100,9 +96,33 @@
             </nav>
         </header>
         <main>
-            @yield('content')
+            @guest
+                @yield('content')
+            @else
+            <div class="container_fluid">
+                <div class="row">
+                    @include('inc.inc_sidebar')
+                    <div class="col-md-8">
+                        <div class="container pt-5">
+                            <h2 class="text-center mb-3">@yield('page_description')</h2>
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
+                            @yield('content')
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endguest
         </main>
-        <footer class="pt-4 my-md-5 pt-md-5 border-top">
+        <footer class="pt-5 border-top">
             <div class="container">
                 <div class="row">
                     <div class="col-12 col-md">

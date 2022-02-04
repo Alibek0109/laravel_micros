@@ -18,9 +18,9 @@ class CreateMainsTable extends Migration
             $table->bigInteger('type_id')->unsigned();
             $table->bigInteger('category_id')->unsigned();
             $table->string('date');
-            $table->integer('sum');
+            $table->float('sum', 15, 2);
             $table->integer('user_id');
-            $table->integer('result')->default(0);
+            $table->float('result', 15, 2)->default(0);
             $table->text('comment')->nullable();
 
             $table->timestamps();

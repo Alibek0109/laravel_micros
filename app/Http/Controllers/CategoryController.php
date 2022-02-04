@@ -15,7 +15,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categoryModel = Category::where('user_id', Auth::id())->get();
+        $categoryModel = Category::where('user_id', Auth::id())->paginate(10);
         return view('category.index', ['categoryModel' => $categoryModel]);
     }
 

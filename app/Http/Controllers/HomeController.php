@@ -28,27 +28,26 @@ class HomeController extends Controller
      */
     public function index()
     {
-        if (session("have")) {
-            $mainModel = Main::with('categories')->orderBy('id', 'desc')->where('user_id', Auth::id())->where('type_id', 1)->paginate(2);
-        } else if (session("spend")) {
-            $mainModel = Main::with('categories')->orderBy('id', 'desc')->where('user_id', Auth::id())->where('type_id', 2)->paginate(2);
-        } else {
-            $mainModel = Main::with('categories')->orderBy('id', 'desc')->where('user_id', Auth::id())->paginate(2);
-        }
-
+        $mainModel = Main::with('categories')->orderBy('id', 'desc')->where('user_id', Auth::id())->paginate(10);
 
 
         return view('home.index', ['mainModel' => $mainModel]);
     }
 
 
-    protected function filter(Request $request) {
-        $stat = $request->input("stat");
-        $statArr = ['have', 'spend', 'spectime'];
-        foreach($statArr as $el) {
-            if ($el == $stat);
-            return redirect()->route('home.index')->with($stat, $stat);
-        }
+    public function search(Request $request)
+    {
+        $data = $request->validate([
+            'search' => 'string'
+        ]);
+
+        $categories = Category::where('title', 'like', "%{$data['search']}%")->pluck('id');
+
+
+        $mainModel = Main::where('user_id', Auth::id())->whereIn('category_id', $categories)->orderBy('id', 'desc')->paginate(10);
+
+
+        return view('home.search', ['mainModel' => $mainModel]);
     }
 
     /**
@@ -72,7 +71,7 @@ class HomeController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'type_id' => 'required',
             'category_id' => 'required',
             'date' => 'required',
@@ -89,6 +88,7 @@ class HomeController extends Controller
         $mainModel->sum = $request->input('sum');
         $mainModel->comment = $request->input('comment');
         $mainModel->user_id = Auth::id();
+
 
         if ($request->input('type_id') == 1) {
             $mainModel->result = $prevResult + $request->input('sum');
@@ -155,13 +155,13 @@ class HomeController extends Controller
 
         // обновление динамичного result
         $mainDB = DB::table("mains")->where('user_id', Auth::id())->where('deleted_at', null)->where('id', '>=', $id)->get();
-        foreach($mainDB as $key => $el) {
+        foreach ($mainDB as $key => $el) {
             $mainModel = Main::find($el->id);
             $prevResult = DB::table('mains')->where('user_id', Auth::id())->where('id', '<', $el->id)->where('deleted_at', null)->orderBy('id', 'desc')->pluck('result')->first();
-            if($mainModel->type_id == 1) {
+            if ($mainModel->type_id == 1) {
                 $mainModel->result = $prevResult + $mainModel->sum;
                 $mainModel->save();
-            }else if ($mainModel->type_id == 2) {
+            } else if ($mainModel->type_id == 2) {
                 $mainModel->result = $prevResult - $mainModel->sum;
                 $mainModel->save();
             }
@@ -194,14 +194,14 @@ class HomeController extends Controller
             $mainModel = Main::find($el->id);
             $prevData = DB::table('mains')->where('id', '<', $el->id)->where('deleted_at', null)->orderBy('id', 'desc')->first();
             if ($el->type_id == 1) {
-                if($el->id == $startModel->id) {
+                if ($el->id == $startModel->id) {
                     $mainModel->result = $el->sum;
                 } else {
                     $mainModel->result = $prevData->result + $el->sum;
                 }
                 $mainModel->save();
             } else if ($el->type_id == 2) {
-                if($el->id == $startModel->id) {
+                if ($el->id == $startModel->id) {
                     $mainModel->result = 0 - $el->sum;
                 } else {
                     $mainModel->result = $prevData->result - $el->sum;
@@ -210,10 +210,13 @@ class HomeController extends Controller
             }
         }
 
-
+        
         return redirect()->route("home.index")->with("success", "Данные удалены");
     }
 
 
 
+    public function restore()
+    {
+    }
 }
