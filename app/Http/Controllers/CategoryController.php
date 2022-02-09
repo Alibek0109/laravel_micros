@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Main;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -39,7 +40,7 @@ class CategoryController extends Controller
     {
         $validated = $request->validate([
             'type_id' => 'required',
-            'title' => 'required|min:3|max:20'
+            'title' => 'string'
         ]);
 
         $categoryModel = new Category;
@@ -70,7 +71,8 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $category = Category::find($id);
+        return view('category.edit', ['category' => $category]);
     }
 
     /**
@@ -82,7 +84,15 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->validate([
+            'title' => 'string'
+        ]);
+
+        $catModel = Category::find($id);
+        $catModel->title = $request->input('title');
+        $catModel->save();
+
+        return redirect()->route('home.category.index')->with('success', 'Категория успешно была изменена');
     }
 
     /**
@@ -93,6 +103,12 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $mainModel = Main::where("category_id", $id)->get();
+        if($mainModel->count() > 0) {
+            return redirect()->route('home.category.index')->with('error', 'Невозможно удалить категорию, потому что она используется');
+        } else {
+            $delete = Category::destroy($id);
+            return redirect()->route('home.category.index')->with('success', 'Категория успешно удалена');
+        }
     }
 }

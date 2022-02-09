@@ -11,6 +11,7 @@
                 <th scope="col">Номер</th>
                 <th scope="col">Тип</th>
                 <th scope="col">Категория</th>
+                <th scope="col">Действия</th>
             </tr>
         </thead>
         <tbody>
@@ -24,6 +25,14 @@
                         <td>Расход</td>
                     @endif
                     <td>{{ $el->title }}</td>
+                    <td>
+                        <a href="{{route('home.category.edit', ['id' => $el->id])}}" class="btn btn-warning">Редактировать</a>
+                        <form action="{{route('home.category.destroy', ['id' => $el->id])}}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">Удалить</button>
+                        </form>
+                    </td>
                 </tr>
             @endforeach
         </tbody>

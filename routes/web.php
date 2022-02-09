@@ -21,9 +21,12 @@ Route::group(['prefix' => 'home', 'middleware' => 'auth'], function (){
     Route::delete('/{id}', [HomeController::class, 'destroy'])->name('home.destroy');
 
     Route::group(['prefix' => 'category'], function (){
-        Route::get('/index', [CategoryController::class, 'index'])->name('home.category.index');
+        Route::get('/', [CategoryController::class, 'index'])->name('home.category.index');
         Route::get('/create', [CategoryController::class, 'create'])->name('home.category.create');
-        Route::post('/store', [CategoryController::class, 'store'])->name('home.category.store');
+        Route::post('/', [CategoryController::class, 'store'])->name('home.category.store');
+        Route::get('/{id}/edit', [CategoryController::class, 'edit'])->name('home.category.edit');
+        Route::patch('/{id}', [CategoryController::class, 'update'])->name('home.category.update');
+        Route::delete('/{id}', [CategoryController::class, 'destroy'])->name('home.category.destroy');
     });
 });
 

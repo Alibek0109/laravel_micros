@@ -79,7 +79,7 @@
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                         <a class="dropdown-item text-danger" href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
-                                                                                         document.getElementById('logout-form').submit();">
+                                                                                             document.getElementById('logout-form').submit();">
                                             {{ __('Выйти') }}
                                         </a>
 
@@ -99,27 +99,38 @@
             @guest
                 @yield('content')
             @else
-            <div class="container_fluid">
-                <div class="row">
-                    @include('inc.inc_sidebar')
-                    <div class="col-md-8">
-                        <div class="container pt-5">
-                            <h2 class="text-center mb-3">@yield('page_description')</h2>
-                            @if ($errors->any())
+                <div class="container_fluid">
+                    <div class="row">
+                        @include('inc.inc_sidebar')
+                        <div class="col-md-8">
+                            <div class="container pt-5">
+                                <h2 class="text-center mb-3">@yield('page_description')</h2>
+                                @yield('forms')
+                                @if (session('success'))
+                                    <div class="alert alert-success">
+                                        {{ session('success') }}
+                                    </div>
+                                @endif
+                                @if (session('error'))
                                 <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
+                                    {{ session('error') }}
                                 </div>
                             @endif
+                                @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
 
-                            @yield('content')
+                                @yield('content')
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             @endguest
         </main>
         <footer class="pt-5 border-top">
@@ -186,4 +197,5 @@ integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="ano
 <script>
     @yield('jquery')
 </script>
+
 </html>

@@ -15,7 +15,7 @@ class Main extends Model
     protected $fillable = ['id', 'type_id', 'category_id', 'date', 'sum', 'user_id', 'result', 'comment', 'created_at', 'updated_at', 'deleted_at'];
 
     public function categories() {
-        return $this->hasMany(Category::class, 'id', 'category_id');
+        return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 }
 

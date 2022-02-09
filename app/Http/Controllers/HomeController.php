@@ -28,8 +28,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $mainModel = Main::with('categories')->orderBy('id', 'desc')->where('user_id', Auth::id())->paginate(10);
-
+        $mainModel = Main::with('categories')->orderBy('id', 'desc')->where('user_id', Auth::id())->paginate(7);
 
         return view('home.index', ['mainModel' => $mainModel]);
     }
@@ -44,7 +43,7 @@ class HomeController extends Controller
         $categories = Category::where('title', 'like', "%{$data['search']}%")->pluck('id');
 
 
-        $mainModel = Main::where('user_id', Auth::id())->whereIn('category_id', $categories)->orderBy('id', 'desc')->paginate(10);
+        $mainModel = Main::where('user_id', Auth::id())->whereIn('category_id', $categories)->orderBy('id', 'desc')->paginate(7);
 
 
         return view('home.search', ['mainModel' => $mainModel]);
@@ -210,13 +209,7 @@ class HomeController extends Controller
             }
         }
 
-        
+
         return redirect()->route("home.index")->with("success", "Данные удалены");
-    }
-
-
-
-    public function restore()
-    {
     }
 }

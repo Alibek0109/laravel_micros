@@ -23,6 +23,7 @@ class CreateMainsTable extends Migration
             $table->float('result', 15, 2)->default(0);
             $table->text('comment')->nullable();
 
+            $table->foreign('category_id')->references('id')->on('categories');
             $table->timestamps();
             $table->softDeletes();
 
