@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 
-@section('page_description') Создать данные @endsection
+@section('page_description') Создать транзакцию @endsection
 
 @section('content')
 

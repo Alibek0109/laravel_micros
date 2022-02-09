@@ -46,7 +46,28 @@ class HomeController extends Controller
         $mainModel = Main::where('user_id', Auth::id())->whereIn('category_id', $categories)->orderBy('id', 'desc')->paginate(7);
 
 
-        return view('home.search', ['mainModel' => $mainModel]);
+        return view('home.index', ['mainModel' => $mainModel]);
+    }
+
+    public function stat(Request $request) {
+        $data = $request->validate([
+            'type_id' => '',
+            'date_start' => '',
+            'date_end' => '',
+        ]);
+
+        if($data['type_id'] == 1) {
+            $count = Main::where('user_id', Auth::id())->where('type_id', 1)->whereBetween("date", [$data['date_start'], $data['date_end']])->sum('sum');
+            return redirect()->route('home.index')->with('stat', "С {$data['date_start']} до {$data['date_end']} вы заработали $count $");
+        } elseif ($data['type_id'] == 2) {
+            $count = Main::where('user_id', Auth::id())->where('type_id', 2)->whereBetween("date", [$data['date_start'], $data['date_end']])->sum('sum');
+            return redirect()->route('home.index')->with('stat', "С {$data['date_start']} до {$data['date_end']} вы потратили $count $");
+        } else {
+            $countIncome = Main::where('user_id', Auth::id())->where('type_id', 1)->whereBetween("date", [$data['date_start'], $data['date_end']])->sum('sum');
+            $countSpend = Main::where('user_id', Auth::id())->where('type_id', 2)->whereBetween("date", [$data['date_start'], $data['date_end']])->sum('sum');
+            $count = $countIncome - $countSpend;
+            return redirect()->route('home.index')->with('stat', "С {$data['date_start']} до {$data['date_end']} вы потратили $count $");
+        }
     }
 
     /**

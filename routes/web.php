@@ -14,6 +14,7 @@ Route::group(['prefix' => 'home', 'middleware' => 'auth'], function (){
     Route::get('/', [HomeController::class, 'index'])->name('home.index');
     Route::get('/create', [HomeController::class, 'create'])->name('home.create');
     Route::get('/search', [HomeController::class, 'search'])->name('home.search');
+    Route::post('/stat', [HomeController::class, 'stat'])->name('home.stat');
 
     Route::post('/', [HomeController::class, 'store'])->name('home.store');
     Route::get('/{id}/edit', [HomeController::class, 'edit'])->name('home.edit');

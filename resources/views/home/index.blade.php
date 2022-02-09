@@ -3,10 +3,42 @@
 @section('page_description') Бухгалтерия @endsection
 
 @section('forms')
+    <h3 class="mb-2 mt-5 text-center">Статистика</h3>
+    <form action="{{route('home.stat')}}" method="post" class="mb-5 mt-2">
+        @csrf
+        <div class="query-form d-flex justify-content-between mb-2">
+            <div class="form-group col-md-3">
+                <label for="type_id">Тип</label>
+                <select name="type_id" id="type_id" class="form-control">
+                    <option value="0">Все</option>
+                    <option value="1">Доход</option>
+                    <option value="2">Расход</option>
+                </select>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="date_start">Начало отсчета</label>
+                <input type="date" class="form-control" name="date_start" id="date_start">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="date_end">Конец отсчета</label>
+                <input type="date" class="form-control" name="date_end" id="date_end">
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">Отправить</button>
+    </form>
+
+    @if (session('stat'))
+        <div class="alert alert-info">
+            {{session('stat')}}
+        </div>
+    @endif
+
+    <h3 class="mb-2 text-center">Поиск по категориям</h3>
     <form action="{{ route('home.search') }}" method="get" class="mb-5">
         <div class="form-group">
-            <label for="search">Поиск по категориям</label>
-            <input type="text" class="form-control" id="search" name="search" placeholder="Поиск по категориям">
+            <label for="search">Поиск</label>
+            <input type="text" class="form-control" id="search" name="search" placeholder="Поиск">
             </select>
         </div>
 

@@ -7,7 +7,7 @@
                     <a class="nav-link" href="{{ route('home.index') }}">Главная</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home.create') }}">Создание данных</a>
+                    <a class="nav-link" href="{{ route('home.create') }}">Создать транзакцию</a>
                 </li>
                 <div class="navbar-brand">Категории</div>
                 <li class="nav-item">
