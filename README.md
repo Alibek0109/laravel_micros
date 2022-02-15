@@ -1,2 +1,6 @@
 - :white_check_mark: Laravel проект домашняя бухгалтерия.
 - Скачивайте проект ```git clone https://github.com/Alibek0109/laravel_micros.git```
+- В консоли пропишите ```composer update```
+- У файла .env.example удалите .example, настройте связь с базой данных.
+- Создайте новый ключ. В консоли пропишите ``` php artisan key:generate ```
+- Запустите проект ``` php artisan serve ```
