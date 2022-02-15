@@ -1,2 +1,2 @@
 - :white_check_mark: Laravel проект домашняя бухгалтерия.
-- Скачивайте проект git clone 
+- Скачивайте проект ```git clone https://github.com/Alibek0109/laravel_micros.git```
