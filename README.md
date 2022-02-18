@@ -3,4 +3,5 @@
 - В консоли пропишите ```composer update```
 - У файла .env.example удалите .example, настройте связь с базой данных.
 - Создайте новый ключ. В консоли пропишите ``` php artisan key:generate ```
+- Мигрируйте данные в базу данных ``` php artisan migrate ```
 - Запустите проект ``` php artisan serve ```
